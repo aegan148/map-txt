@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <map>
+#include <vector>
 
 std::string global;
 void chos();
@@ -15,8 +16,10 @@ void map2(std::map<int, std::string>& map, int& v, std::string& s);
 void prover();
 std::string key;
 int value;
-void compare(std::map<int, std::string>& r, std::map<int, std::string>& p);
+void compare(std::map<int, std::string>& r, int & val, std::string & name);
 bool test_empty(std::ifstream& file, bool& tes);
+std::string name1;
+int id1;
 
 int main()
 {
@@ -95,13 +98,13 @@ int main()
 		std::cout << i->first << " = " << i->second << "\n";
 	}
 	};
-	// при вызове 3. Создание карты с данными от пользователя с дальнейшим сравнением пар-ключей с существующей картой
+	// при вызове 3. Создание карты из текстового файла с дальнейшим сравнением запроса пар от пользователя
 	void check(std::map<int, std::string>& map) {
 		map2(map, value, key);
 		if (map.size() != 0) {
-			int id1;
+			id1;
 			int test_num = 0;
-			std::string name1;
+			name1;
 			std::cout << "Enter the id(number)" << std::endl;
 			while (!(std::cin >> id1) || (std::cin.peek() != '\n'))
 			{
@@ -113,33 +116,29 @@ int main()
 			std::cout << "Enter the password" << std::endl;
 			std::cin >> name1;
 			std::cout << std::endl;
-			std::map <int, std::string> slov;
-			slov[id1] = name1;
 			std::cout << std::endl << "Comparing the key...." << std::endl;
-			compare(slov, map);
+			compare(myMap, id1, name1);
 		}
 	}
 
-	//продолжение 3. Сравнение на совпадение пар-ключей из двух разных карт
-	void compare(std::map<int, std::string>& r, std::map<int, std::string>& p)
+	//продолжение 3. Сравнение на совпадение пар-ключей и данных от пользователя
+	void compare(std::map<int, std::string>& r,int  &val, std::string & name)
 	{
-		std::map<int, std::string>::iterator i = p.begin(); i != p.end();
-		std::map<int, std::string>::iterator ri = r.begin(); ri != r.end();
-		int bil = 0;
-		for (ri; ri != r.end(); ++ri)
-		{
-			for (i; i != p.end(); ++i) {
-				if ((i->second) == (ri->second) && (i->first) == (ri->first)) {
-						bil = 1;
-				}
+		std::map<int, std::string>::iterator ri = r.find(val);
+		std::map<int, std::string>::iterator i = r.begin(); i != r.end();
+		
+		if (ri != r.end()) {
+			std::map<int, std::string>::iterator i = r.begin(); i != r.end();
+			if((ri->second)== name)
+			std::cout << "Entering allowed" << std::endl << "____________________________" << std::endl << std::endl;
+			else {
+				std::cout << "Entering not allowed" << std::endl << "____________________________" << std::endl << std::endl;
 			}
 		}
-		if (bil==1) {
-			std::cout << "Entering allowed" << std::endl << "____________________________" << std::endl << std::endl;
-		}	else {
-				std::cout << "Entering not allowed" << std::endl << "____________________________" << std::endl << std::endl;
+		else {
+			std::cout << "Entering not allowed" << std::endl << "____________________________" << std::endl << std::endl;
 		}
-	}
+	};
 	//заполнение массива из готового файла пар-ключей(БД)
 	void map2(std::map<int, std::string> & map, int & v, std::string & s) {
 		std::ifstream fil("file.txt");
